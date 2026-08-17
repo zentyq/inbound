@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+	output: "standalone",
 	/* config options here */
 	// Add Turbopack configuration to suppress warnings
 	turbopack: {
@@ -47,9 +48,11 @@ const nextConfig: NextConfig = {
 						value:
 							process.env.NODE_ENV === "development"
 								? "https://dev.inbound.new"
-								: process.env.VERCEL_URL
-									? `https://${process.env.VERCEL_URL}`
-									: "https://inbound.new",
+								: process.env.NEXT_PUBLIC_APP_URL
+									? process.env.NEXT_PUBLIC_APP_URL
+									: process.env.VERCEL_URL
+										? `https://${process.env.VERCEL_URL}`
+										: "https://inbound.new",
 					},
 					{
 						key: "Access-Control-Allow-Methods",
