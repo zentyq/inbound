@@ -7,8 +7,9 @@ FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG NODE_OPTIONS=--max-old-space-size=2048
+ENV NODE_OPTIONS=$NODE_OPTIONS
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_OPTIONS=--max-old-space-size=2048
 ENV DATABASE_URL=postgresql://build:build@localhost:5432/build
 ENV INBOUND_API_KEY=dummy_key_for_build
 RUN bunx next build
