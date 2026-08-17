@@ -1,16 +1,17 @@
 FROM oven/bun:1 AS deps
 WORKDIR /app
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+COPY package.json ./
+RUN bun install
 
 FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS=--max-old-space-size=2048
 ENV DATABASE_URL=postgresql://build:build@localhost:5432/build
 ENV INBOUND_API_KEY=dummy_key_for_build
-RUN bun run build
+RUN bunx next build
 
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
